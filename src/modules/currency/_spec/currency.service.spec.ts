@@ -60,6 +60,7 @@ describe('CurrencyService', () => {
     service = module.get<CurrencyService>(CurrencyService);
   });
 
+  //P.S at start - currency service had only convertCurrency Method!
   describe('convertCurrency', () => {
     it('should convert currency with direct rates USD to UAH', async () => {
       const result = await service.convertCurrency('USD', 'UAH', 100);

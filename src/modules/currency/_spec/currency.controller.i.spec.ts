@@ -5,6 +5,7 @@ import { NotSupportedCurrencyException } from '../helpers/errors';
 
 const mockCurrencyService = {
   convertCurrency: jest.fn(),
+  convertCurrencyByCodes: jest.fn(),
 };
 
 describe('CurrencyController', () => {
@@ -41,6 +42,21 @@ describe('CurrencyController', () => {
       mockCurrencyService.convertCurrency.mockRejectedValue(new NotSupportedCurrencyException('XYZ'));
 
       await expect(controller.convertCurrency(mockRequest)).rejects.toThrowError(NotSupportedCurrencyException);
+    });
+  });
+
+  describe('convertCurrencyByCodes', () => {
+    it('should convert currency successfully', async () => {
+      const mockRequest = { source: 840, target: 900, amount: 100 };
+      const mockResponse = 85; // Mock the expected result from the service
+
+      // Mock the service method
+      mockCurrencyService.convertCurrencyByCodes.mockResolvedValue(mockResponse);
+
+      const result = await controller.convertCurrencyByCodes(mockRequest);
+
+      expect(result).toBe(mockResponse);
+      expect(currencyService.convertCurrencyByCodes).toHaveBeenCalledWith(840, 900, 100);
     });
   });
 });

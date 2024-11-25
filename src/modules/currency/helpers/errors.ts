@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 
 export class NotSupportedCurrencyException extends HttpException {
-  constructor(currency: string) {
+  constructor(currency: string | number) {
     super(`Currency not supported: ${currency}`, HttpStatus.BAD_REQUEST);
   }
 }

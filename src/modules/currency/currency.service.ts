@@ -16,6 +16,10 @@ export class CurrencyService {
     if (!sourceCode) throw new NotSupportedCurrencyException(sourceCurrency);
     if (!targetCode) throw new NotSupportedCurrencyException(targetCurrency);
 
+    return this.convertCurrencyByCodes(sourceCode, targetCode, amount);
+  }
+
+  async convertCurrencyByCodes(sourceCode: number, targetCode: number, amount: number): Promise<number> {
     const ratesList = await this.apiService.getExchangeRates();
 
     const pairRates = this.findRates(ratesList, sourceCode, targetCode);
@@ -23,7 +27,7 @@ export class CurrencyService {
     if (pairRates) {
       return this.calculateDirectConversion(pairRates, amount, sourceCode);
     } else {
-      return this.calculateIndirectConversion(ratesList, amount, sourceCode, targetCode, sourceCurrency, targetCurrency);
+      return this.calculateIndirectConversion(ratesList, amount, sourceCode, targetCode);
     }
   }
 
@@ -51,19 +55,12 @@ export class CurrencyService {
     return rates.currencyCodeB === sourceCode ? amount / rate : amount * rate;
   }
 
-  calculateIndirectConversion(
-    ratesList: IMonobankCurrencyExchange[],
-    amount: number,
-    sourceCode: number,
-    targetCode: number,
-    sourceCurrency: string,
-    targetCurrency: string,
-  ): number {
+  calculateIndirectConversion(ratesList: IMonobankCurrencyExchange[], amount: number, sourceCode: number, targetCode: number): number {
     const sourceRatesToUAH = this.findRatesToUAH(ratesList, sourceCode);
     const targetRatesToUAH = this.findRatesToUAH(ratesList, targetCode);
 
-    if (!sourceRatesToUAH) throw new NotSupportedCurrencyException(sourceCurrency);
-    if (!targetRatesToUAH) throw new NotSupportedCurrencyException(targetCurrency);
+    if (!sourceRatesToUAH) throw new NotSupportedCurrencyException(sourceCode);
+    if (!targetRatesToUAH) throw new NotSupportedCurrencyException(targetCode);
 
     const amountInUAH = this.calculateDirectConversion(sourceRatesToUAH, amount, sourceCode);
 

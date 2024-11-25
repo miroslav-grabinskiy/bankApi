@@ -9,7 +9,6 @@ export class ApiService {
   private redisClient: RedisClientType;
 
   constructor(private readonly configService: ConfigService) {
-    console.log(this.configService.get('REDIS_HOST'), this.configService.get('REDIS_PORT'));
     this.redisClient = createClient({
       url: `redis://${this.configService.get('REDIS_HOST')}:${this.configService.get('REDIS_PORT')}`,
     });

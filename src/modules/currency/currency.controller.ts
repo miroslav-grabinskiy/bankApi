@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
-import { ConvertCurrencyDto } from './dto/dto';
+import { ConvertCurrencyDto, ConvertCurrencyByCodesDto } from './dto/dto';
 
 /**
  * Controller for handling currency conversion requests.
@@ -13,5 +13,11 @@ export class CurrencyController {
   async convertCurrency(@Body() body: ConvertCurrencyDto): Promise<number> {
     const { source, target, amount } = body;
     return this.currencyService.convertCurrency(source, target, amount);
+  }
+
+  @Post('convertByCodes')
+  async convertCurrencyByCodes(@Body() body: ConvertCurrencyByCodesDto): Promise<number> {
+    const { source, target, amount } = body;
+    return this.currencyService.convertCurrencyByCodes(source, target, amount);
   }
 }
